@@ -44,9 +44,9 @@ jobs:
       - name: 'Resolve Project Dependencies Using Pip'
         shell: bash
         run: |
-          pushd './python/src'
+          pushd './azure_functions'
           python -m pip install --upgrade pip
-          pip install -r requirements.txt -r requirements_azure_func.txt --target=".python_packages/lib/site-packages"
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
 
       - name: Azure CLI Login
@@ -60,4 +60,4 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: 'func-python-13876'
-          package: './python/src'
+          package: './azure_functions'
