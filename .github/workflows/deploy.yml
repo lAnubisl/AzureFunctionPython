@@ -30,3 +30,34 @@ jobs:
       - name: Terraform Apply
         working-directory: ./terraform_infrastructure
         run: terraform apply -auto-approve "tfplan"
+
+  function-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 'Resolve Project Dependencies Using Pip'
+        shell: bash
+        run: |
+          pushd './python/src'
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements_azure_func.txt --target=".python_packages/lib/site-packages"
+          popd
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: 'func-python-13876'
+          package: './python/src'
