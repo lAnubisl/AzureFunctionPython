@@ -1,0 +1,19 @@
+{
+    "build": { "dockerfile": "Dockerfile" },
+    	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			"settings": {},
+			"extensions": [
+				"hashicorp.terraform",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	},
+    "features": {
+        "ghcr.io/devcontainers/features/terraform:latest": {}
+
+    },
+	"postCreateCommand": "pre-commit install"
+}
