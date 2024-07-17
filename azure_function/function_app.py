@@ -1,13 +1,9 @@
 import logging.config
+import logging.handlers
 import azure.functions as func
-import yaml
 
-with open("log_conf.yaml", "rt") as f:
-    config = yaml.safe_load(f.read())
 
-logging.config.dictConfig(config)
 logger = logging.getLogger("root")
-
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 
