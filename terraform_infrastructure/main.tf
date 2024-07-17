@@ -6,6 +6,9 @@ terraform {
     }
   }
   required_version = ">= 1.4.6"
+
+  backend "azurerm" {
+  }
 }
 
 provider "azurerm" {
@@ -18,7 +21,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "st_func" {
-  name                            = "stfuncpythondeployment"
+  name                            = "stfuncpython13876"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
   account_tier                    = "Standard"
@@ -26,7 +29,7 @@ resource "azurerm_storage_account" "st_func" {
 }
 
 resource "azurerm_service_plan" "func_plan" {
-  name                = "plan-func-python-deployment-test"
+  name                = "plan-func-python-deployment-13876"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
@@ -34,7 +37,7 @@ resource "azurerm_service_plan" "func_plan" {
 }
 
 resource "azurerm_linux_function_app" "func" {
-  name                       = "func-python-deployment-test"
+  name                       = "func-python-13876"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   service_plan_id            = azurerm_service_plan.func_plan.id
