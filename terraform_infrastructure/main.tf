@@ -66,7 +66,7 @@ resource "azurerm_log_analytics_workspace" "logs" {
 resource "azurerm_application_insights" "appi" {
   name                = "appi-func-python-13876"
   location            = azurerm_resource_group.rg.location
-  resource_group_name = lazurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.rg.name
   workspace_id        = azurerm_log_analytics_workspace.logs.id
   application_type    = "other"
   retention_in_days   = 30
