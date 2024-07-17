@@ -48,8 +48,26 @@ resource "azurerm_linux_function_app" "func" {
     FUNCTIONS_WORKER_RUNTIME = "python"
   }
   site_config {
+    application_insights_key = azurerm_application_insights.appi.instrumentation_key
     application_stack {
       python_version = "3.10"
     }
   }
+}
+
+resource "azurerm_log_analytics_workspace" "logs" {
+  name                = "logs-func-python-13876"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_application_insights" "appi" {
+  name                = "appi-func-python-13876"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = lazurerm_resource_group.rg.name
+  workspace_id        = azurerm_log_analytics_workspace.logs.id
+  application_type    = "other"
+  retention_in_days   = 30
 }
