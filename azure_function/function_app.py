@@ -13,5 +13,5 @@ def Health(req: func.HttpRequest) -> func.HttpResponse:
     logger.debug("Debug Health Check")
     logger.error("Error Health Check")
     logger.warning("Warning Health Check")
-    logger.critical("Critical Health")
+    logger.critical("Critical Health Check")
     return func.HttpResponse("Healthy", status_code=200)
