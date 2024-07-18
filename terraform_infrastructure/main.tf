@@ -82,8 +82,8 @@ resource "azurerm_storage_table" "st_tbl_records" {
   storage_account_name = azurerm_storage_account.st_func.name
 }
 
-# resource "azurerm_role_assignment" "table_func_role_assignment" {
-#   scope                = azurerm_storage_account.st_func.id
-#   role_definition_name = "Storage Table Data Contributor"
-#   principal_id         = azurerm_linux_function_app.func.identity[0].principal_id
-# }
+resource "azurerm_role_assignment" "table_func_role_assignment" {
+  scope                = azurerm_storage_account.st_func.id
+  role_definition_name = "Storage Table Data Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity[0].principal_id
+}

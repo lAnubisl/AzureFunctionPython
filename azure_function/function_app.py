@@ -11,18 +11,15 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 table_helper = AzureTableStorageHelper(logger)
 
 
+@app.function_name(name="Health")
 @app.route(route="Health")
 def Health(req: func.HttpRequest) -> func.HttpResponse:
-    logger.info("Info Health Check")
-    logger.debug("Debug Health Check")
-    logger.error("Error Health Check")
-    logger.warning("Warning Health Check")
-    logger.critical("Critical Health Check")
     return func.HttpResponse("Healthy", status_code=200)
 
 
+@app.function_name(name="SetRecord")
 @app.route(route="SetRecord", methods=["GET"])
-def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
+async def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
     logger.info("Info CreateRecord")
     logger.debug("Debug CreateRecord")
     logger.error("Error CreateRecord")
@@ -35,6 +32,7 @@ def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse("Record Created", status_code=200)
 
 
+@app.function_name(name="GetRecord")
 @app.route(route="Record", methods=["GET"])
 async def GetRecord(req: func.HttpRequest) -> func.HttpResponse:
     logger.info("Info GetRecord")
