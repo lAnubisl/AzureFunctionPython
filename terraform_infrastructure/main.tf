@@ -46,6 +46,8 @@ resource "azurerm_linux_function_app" "func" {
   app_settings = {
     AzureWebJobsFeatureFlags = "EnableWorkerIndexing"
     FUNCTIONS_WORKER_RUNTIME = "python"
+    STORAGE_ACCOUNT_NAME     = azurerm_storage_account.st_func.name
+    STORAGE_TABLE_NAME       = azurerm_storage_table.st_tbl_records.name
   }
   site_config {
     application_insights_key = azurerm_application_insights.appi.instrumentation_key
@@ -70,4 +72,15 @@ resource "azurerm_application_insights" "appi" {
   workspace_id        = azurerm_log_analytics_workspace.logs.id
   application_type    = "other"
   retention_in_days   = 30
+}
+
+resource "azurerm_storage_table" "st_tbl_records" {
+  name                 = "records"
+  storage_account_name = azurerm_storage_account.st_func.name
+}
+
+resource "azurerm_role_assignment" "table_func_role_assignment" {
+  scope                = azurerm_storage_account.st_func.id
+  role_definition_name = "Storage Table Data Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity[0].principal_id
 }
