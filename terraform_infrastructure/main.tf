@@ -49,6 +49,9 @@ resource "azurerm_linux_function_app" "func" {
     STORAGE_ACCOUNT_NAME     = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME       = azurerm_storage_table.st_tbl_records.name
   }
+  identity {
+    type = "SystemAssigned"
+  }
   site_config {
     application_insights_key = azurerm_application_insights.appi.instrumentation_key
     application_stack {

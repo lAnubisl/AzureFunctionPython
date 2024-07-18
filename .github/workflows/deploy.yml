@@ -33,6 +33,7 @@ jobs:
 
   function-deploy:
     runs-on: ubuntu-latest
+    needs: [infrastructure]
     steps:
       - uses: actions/checkout@v4
 
