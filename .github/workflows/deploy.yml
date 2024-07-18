@@ -1,5 +1,8 @@
 name: "Deploy"
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions: # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
