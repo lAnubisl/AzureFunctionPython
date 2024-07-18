@@ -46,12 +46,14 @@ class AzureTableStorageHelper:
             "Decision": data.decision,
             "UpdatedAt": data.updated_at,
         }
-        await self.__get_client().upsert_entity(entity=entity)
+        with self.__get_client() as table_client:
+            await table_client.upsert_entity(entity=entity)
 
     async def get_record(self, user_id: str) -> Union[Record, None]:
         self._logger.debug("get_record: user_id: %s", user_id)
         try:
-            entity = await self.__get_client().get_entity(user_id, f"{user_id}")
+            with self.__get_client() as table_client:
+                entity = await table_client.get_entity(user_id, f"{user_id}")
         except ResourceNotFoundError:
             return None
 
