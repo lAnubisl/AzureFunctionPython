@@ -28,7 +28,7 @@ async def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
         "123", "This is a note", 1, True, datetime.now(timezone.utc)
     )
     table_helper = AzureTableStorageHelper(logger)
-    table_helper.set_record(record)
+    await table_helper.set_record(record)
     return func.HttpResponse("Record Created", status_code=200)
 
 
