@@ -37,7 +37,7 @@ class AzureTableStorageHelper:
         self._table_client = TableClient(endpoint, table_name, credential=credential)
 
     async def set_record(self, data: Record) -> None:
-        self._logger.debug("set_records: data: %s", data)
+        self._logger.info("set_records: data: %s", data)
         entity = {
             "PartitionKey": data.user_id,
             "RowKey": f"{data.user_id}",
@@ -49,7 +49,7 @@ class AzureTableStorageHelper:
         await self.__get_client().upsert_entity(entity=entity)
 
     async def get_record(self, user_id: str) -> Union[Record, None]:
-        self._logger.debug("get_record: user_id: %s", user_id)
+        self._logger.info("get_record: user_id: %s", user_id)
         try:
             entity = await self.__get_client().get_entity(user_id, f"{user_id}")
         except ResourceNotFoundError:
