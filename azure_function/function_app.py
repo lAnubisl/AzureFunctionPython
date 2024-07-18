@@ -5,6 +5,11 @@ from datetime import datetime, timezone
 from azure_storage_table_helper import Record
 from azure_storage_table_helper import AzureTableStorageHelper
 
+logger = logging.getLogger("azure")
+logger.setLevel(logging.ERROR)
+
+logger = logging.getLogger("msal")
+logger.setLevel(logging.ERROR)
 
 logger = logging.getLogger("root")
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
