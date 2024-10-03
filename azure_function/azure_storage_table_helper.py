@@ -36,7 +36,7 @@ class AzureTableStorageHelper:
         self._table_name = os.environ["STORAGE_TABLE_NAME"]
 
     async def set_record(self, data: Record) -> None:
-        self._logger.info("set_records: data: %s", data)
+        self._logger.info("Call: set_records(data: Record)")
         entity: Mapping[str, Any] = {
             "PartitionKey": data.user_id,
             "RowKey": data.user_id,

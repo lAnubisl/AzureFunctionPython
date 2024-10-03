@@ -8,7 +8,8 @@ from opencensus.extension.azure.functions import OpenCensusExtension
 from opencensus.trace import config_integration
 
 # https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=get-started%2Casgi%2Capplication-level&pivots=python-mode-decorators#log-custom-telemetry
-
+# https://learn.microsoft.com/en-us/azure/azure-monitor/app/asp-net-dependencies#dependency-auto-collection
+# https://learn.microsoft.com/en-us/azure/azure-monitor/app/api-custom-events-metrics#trackdependency
 
 config_integration.trace_integrations(['requests'])
 OpenCensusExtension.configure()
@@ -30,7 +31,7 @@ def Health(req: func.HttpRequest) -> func.HttpResponse:
 
 @app.function_name(name="SetRecord")
 @app.route(route="SetRecord", methods=["GET"])
-async def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
+async def CreateRecord(req: func.HttpRequest, context) -> func.HttpResponse:
     logger.info("Info CreateRecord")
     logger.debug("Debug CreateRecord")
     logger.error("Error CreateRecord")
@@ -40,7 +41,8 @@ async def CreateRecord(req: func.HttpRequest) -> func.HttpResponse:
         "123", "This is a note", 1, True, datetime.now(timezone.utc)
     )
     table_helper = AzureTableStorageHelper(logger)
-    await table_helper.set_record(record)
+    with context.tracer.span("TableHelper"):
+        await table_helper.set_record(record)
     return func.HttpResponse("Record Created", status_code=200)
 
 
