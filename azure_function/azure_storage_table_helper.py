@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from azure.data.tables.aio import TableClient
 from azure.identity.aio import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
+from typing import Mapping, Any
 
 
 class Record:
@@ -31,47 +32,46 @@ class AzureTableStorageHelper:
     def __init__(self, logger: logging.Logger):
         self._logger = logger
         storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
-        endpoint = f"https://{storage_account_name}.table.core.windows.net"
-        table_name = os.environ["STORAGE_TABLE_NAME"]
-        credential = DefaultAzureCredential()
-        self._table_client = TableClient(endpoint, table_name, credential=credential)
+        self._endpoint = f"https://{storage_account_name}.table.core.windows.net"
+        self._table_name = os.environ["STORAGE_TABLE_NAME"]
 
     async def set_record(self, data: Record) -> None:
         self._logger.info("set_records: data: %s", data)
-        entity = {
+        entity: Mapping[str, Any] = {
             "PartitionKey": data.user_id,
-            "RowKey": f"{data.user_id}",
+            "RowKey": data.user_id,
             "Note": data.note,
             "Version": data.version,
             "Decision": data.decision,
             "UpdatedAt": data.updated_at,
         }
-        await self.__get_client().upsert_entity(entity=entity)
+        async with DefaultAzureCredential() as creds:
+            async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
+                await client.upsert_entity(entity=entity)
 
     async def get_record(self, user_id: str) -> Union[Record, None]:
         self._logger.info("get_record: user_id: %s", user_id)
-        try:
-            entity = await self.__get_client().get_entity(user_id, f"{user_id}")
-        except ResourceNotFoundError:
-            return None
+        async with DefaultAzureCredential() as creds:
+            async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
+                try:
+                    entity = await client.get_entity(user_id, f"{user_id}")
+                except ResourceNotFoundError:
+                    return None
 
-        upd = entity["UpdatedAt"]
-        return Record(
-            user_id,
-            entity["Note"],
-            int(entity["Version"]),
-            bool(entity["Decision"]),
-            datetime(
-                upd.year,
-                upd.month,
-                upd.day,
-                upd.hour,
-                upd.minute,
-                upd.second,
-                upd.microsecond,
-                tzinfo=timezone.utc,
-            ),
-        )
-
-    def __get_client(self):
-        return self._table_client
+                upd = entity["UpdatedAt"]
+                return Record(
+                    user_id,
+                    entity["Note"],
+                    int(entity["Version"]),
+                    bool(entity["Decision"]),
+                    datetime(
+                        upd.year,
+                        upd.month,
+                        upd.day,
+                        upd.hour,
+                        upd.minute,
+                        upd.second,
+                        upd.microsecond,
+                        tzinfo=timezone.utc,
+                    ),
+                )

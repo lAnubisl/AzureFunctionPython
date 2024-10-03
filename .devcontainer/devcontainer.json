@@ -1,6 +1,5 @@
 {
-    "build": { "dockerfile": "Dockerfile" },
-    	// Configure tool-specific properties.
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
@@ -19,8 +18,18 @@
 	},
     "features": {
         "ghcr.io/devcontainers/features/terraform:latest": {},
-        "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {}
+        "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "installTools": true,
+            "version": "3.11"
+        },
+        "ghcr.io/devcontainers/features/terraform:1": {
+            "version": "latest",
+            "tflint": "latest",
+            "terragrunt": "latest"
+        }
 
-    },
-	"postCreateCommand": "pre-commit install"
+    }
 }
