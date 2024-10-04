@@ -29,14 +29,13 @@ class AzureTableStorageHelper:
     Implements interation with Azure Table Storage
     """
 
-    def __init__(self, logger: logging.Logger):
-        self._logger = logger
+    def __init__(self):
         storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
         self._endpoint = f"https://{storage_account_name}.table.core.windows.net"
         self._table_name = os.environ["STORAGE_TABLE_NAME"]
 
     async def set_record(self, data: Record) -> None:
-        self._logger.info("Call: set_records(data: Record)")
+        logging.info("Call: set_records(data: Record)")
         entity: Mapping[str, Any] = {
             "PartitionKey": data.user_id,
             "RowKey": data.user_id,
@@ -50,7 +49,7 @@ class AzureTableStorageHelper:
                 await client.upsert_entity(entity=entity)
 
     async def get_record(self, user_id: str) -> Union[Record, None]:
-        self._logger.info("get_record: user_id: %s", user_id)
+        logging.info("get_record: user_id: %s", user_id)
         async with DefaultAzureCredential() as creds:
             async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
                 try:

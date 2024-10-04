@@ -1,5 +1,6 @@
 import logging.config
 import logging.handlers
+import requests
 import azure.functions as func
 from datetime import datetime, timezone
 from azure_storage_table_helper import Record
@@ -14,14 +15,6 @@ from opencensus.trace import config_integration
 config_integration.trace_integrations(['requests'])
 OpenCensusExtension.configure()
 
-logger = logging.getLogger("azure")
-logger.setLevel(logging.ERROR)
-
-logger = logging.getLogger("msal")
-logger.setLevel(logging.ERROR)
-
-logger = logging.getLogger("root")
-logger.setLevel(logging.DEBUG)
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.function_name(name="Health")
@@ -32,29 +25,32 @@ def Health(req: func.HttpRequest) -> func.HttpResponse:
 @app.function_name(name="SetRecord")
 @app.route(route="SetRecord", methods=["GET"])
 async def CreateRecord(req: func.HttpRequest, context) -> func.HttpResponse:
-    logger.info("Info CreateRecord")
-    logger.debug("Debug CreateRecord")
-    logger.error("Error CreateRecord")
-    logger.warning("Warning CreateRecord")
-    logger.critical("Critical CreateRecord")
+    logging.info("Info CreateRecord")
+    logging.debug("Debug CreateRecord")
+    logging.error("Error CreateRecord")
+    logging.warning("Warning CreateRecord")
+    logging.critical("Critical CreateRecord")
     record: Record = Record(
         "123", "This is a note", 1, True, datetime.now(timezone.utc)
     )
-    table_helper = AzureTableStorageHelper(logger)
+    table_helper = AzureTableStorageHelper()
     with context.tracer.span("TableHelper"):
         await table_helper.set_record(record)
+    with context.tracer.span("google"):
+        response = requests.get(url='https://google.com')
+        logging.info(response.text)
     return func.HttpResponse("Record Created", status_code=200)
 
 
 @app.function_name(name="GetRecord")
 @app.route(route="Record", methods=["GET"])
 async def GetRecord(req: func.HttpRequest) -> func.HttpResponse:
-    logger.info("Info GetRecord")
-    logger.debug("Debug GetRecord")
-    logger.error("Error GetRecord")
-    logger.warning("Warning GetRecord")
-    logger.critical("Critical GetRecord")
-    table_helper = AzureTableStorageHelper(logger)
+    logging.info("Info GetRecord")
+    logging.debug("Debug GetRecord")
+    logging.error("Error GetRecord")
+    logging.warning("Warning GetRecord")
+    logging.critical("Critical GetRecord")
+    table_helper = AzureTableStorageHelper()
     record = await table_helper.get_record("123")
     if record is None:
         return func.HttpResponse("Record Not Found", status_code=404)
