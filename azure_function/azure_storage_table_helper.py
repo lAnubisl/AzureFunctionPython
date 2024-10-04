@@ -1,27 +1,11 @@
-import logging
 import os
-from typing import Union
+from typing import Mapping, Any, Optional
 from datetime import datetime, timezone
 from azure.data.tables.aio import TableClient
 from azure.identity.aio import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
-from typing import Mapping, Any
-
-
-class Record:
-    def __init__(
-        self,
-        user_id: str,
-        note: str,
-        version: int,
-        decision: bool,
-        updated_at: datetime,
-    ):
-        self.user_id = user_id
-        self.note = note
-        self.version = version
-        self.decision = decision
-        self.updated_at = updated_at
+from record import Record
+from logger_interface import LoggerInterface
 
 
 class AzureTableStorageHelper:
@@ -29,13 +13,14 @@ class AzureTableStorageHelper:
     Implements interation with Azure Table Storage
     """
 
-    def __init__(self):
+    def __init__(self, logger: LoggerInterface):
         storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
         self._endpoint = f"https://{storage_account_name}.table.core.windows.net"
         self._table_name = os.environ["STORAGE_TABLE_NAME"]
+        self._logger = logger
 
     async def set_record(self, data: Record) -> None:
-        logging.info("Call: set_records(data: Record)")
+        self._logger.info("Call: set_records(data: Record)")
         entity: Mapping[str, Any] = {
             "PartitionKey": data.user_id,
             "RowKey": data.user_id,
@@ -48,12 +33,12 @@ class AzureTableStorageHelper:
             async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
                 await client.upsert_entity(entity=entity)
 
-    async def get_record(self, user_id: str) -> Union[Record, None]:
-        logging.info("get_record: user_id: %s", user_id)
+    async def get_record(self, user_id: str) -> Optional[Record]:
+        self._logger.info(f"get_record: user_id: {user_id}")
         async with DefaultAzureCredential() as creds:
             async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
                 try:
-                    entity = await client.get_entity(user_id, f"{user_id}")
+                    entity = await client.get_entity(partition_key=user_id, row_key=user_id)
                 except ResourceNotFoundError:
                     return None
 

@@ -12,7 +12,8 @@
                 "vscode-icons-team.vscode-icons",
                 "github.vscode-github-actions",
                 "GitHub.copilot",
-                "Azurite.azurite"
+                "Azurite.azurite",
+                "ms-python.pylint"
             ]
 		}
 	},
