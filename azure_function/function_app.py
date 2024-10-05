@@ -4,7 +4,7 @@ import azure.functions as func
 import opentelemetry.trace
 from azure.monitor.opentelemetry import configure_azure_monitor
 
-configure_azure_monitor()
+# configure_azure_monitor()
 # tracer: opentelemetry.trace.Tracer = opentelemetry.trace.get_tracer(__name__)
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
