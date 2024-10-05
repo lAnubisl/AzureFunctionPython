@@ -51,6 +51,14 @@ resource "azurerm_linux_function_app" "func" {
     FUNCTIONS_WORKER_RUNTIME        = "python"
     STORAGE_ACCOUNT_NAME            = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME              = azurerm_storage_table.st_tbl_records.name
+
+    # https://learn.microsoft.com/en-us/troubleshoot/azure/azure-monitor/app-insights/telemetry/opentelemetry-troubleshooting-python#duplicate-trace-logs-in-azure-functions
+    # ### Duplicate trace logs in Azure Functions ###
+    # If you see a pair of entries for each trace log within Application Insights, you probably enabled the following types of logging instrumentation:
+    # The native logging instrumentation in Azure Functions
+    # The azure-monitor-opentelemetry logging instrumentation within the distribution
+    # To prevent duplication, you can disable the distribution's logging, but leave the native logging instrumentation in Azure Functions enabled. To do this, set the OTEL_LOGS_EXPORTER environment variable to None.
+    OTEL_LOGS_EXPORTER              = "None"
   }
   identity {
     type = "SystemAssigned"
