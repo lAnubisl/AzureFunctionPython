@@ -1,11 +1,11 @@
 import os
+import logging
 from typing import Mapping, Any, Optional
 from datetime import datetime, timezone
 from azure.data.tables.aio import TableClient
 from azure.identity.aio import DefaultAzureCredential
 from azure.core.exceptions import ResourceNotFoundError
 from record import Record
-from logger_interface import LoggerInterface
 
 
 class AzureTableStorageHelper:
@@ -13,14 +13,13 @@ class AzureTableStorageHelper:
     Implements interation with Azure Table Storage
     """
 
-    def __init__(self, logger: LoggerInterface):
+    def __init__(self):
         storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
         self._endpoint = f"https://{storage_account_name}.table.core.windows.net"
         self._table_name = os.environ["STORAGE_TABLE_NAME"]
-        self._logger = logger
 
     async def set_record(self, data: Record) -> None:
-        self._logger.info("Call: set_records(data: Record)")
+        logging.info("Call: set_records(data: Record)")
         entity: Mapping[str, Any] = {
             "PartitionKey": data.user_id,
             "RowKey": data.user_id,
@@ -34,7 +33,7 @@ class AzureTableStorageHelper:
                 await client.upsert_entity(entity=entity)
 
     async def get_record(self, user_id: str) -> Optional[Record]:
-        self._logger.info(f"get_record: user_id: {user_id}")
+        logging.info(f"get_record: user_id: {user_id}")
         async with DefaultAzureCredential() as creds:
             async with TableClient(self._endpoint, self._table_name, credential=creds) as client:
                 try:

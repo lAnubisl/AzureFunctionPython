@@ -45,11 +45,12 @@ resource "azurerm_linux_function_app" "func" {
   storage_account_access_key = azurerm_storage_account.st_func.primary_access_key
   builtin_logging_enabled    = false
   app_settings = {
-    AzureWebJobsFeatureFlags = "EnableWorkerIndexing"
-    PYTHON_ENABLE_WORKER_EXTENSIONS = "1"
-    FUNCTIONS_WORKER_RUNTIME = "python"
-    STORAGE_ACCOUNT_NAME     = azurerm_storage_account.st_func.name
-    STORAGE_TABLE_NAME       = azurerm_storage_table.st_tbl_records.name
+    # https://learn.microsoft.com/en-us/azure/azure-functions/functions-app-settings#python_enable_worker_extensions
+    
+    PYTHON_ENABLE_WORKER_EXTENSIONS = "1" 
+    FUNCTIONS_WORKER_RUNTIME        = "python"
+    STORAGE_ACCOUNT_NAME            = azurerm_storage_account.st_func.name
+    STORAGE_TABLE_NAME              = azurerm_storage_table.st_tbl_records.name
   }
   identity {
     type = "SystemAssigned"
