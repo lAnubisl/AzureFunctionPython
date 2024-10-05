@@ -5,6 +5,8 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
     "STORAGE_ACCOUNT_NAME": "ST",
-    "STORAGE_TABLE_NAME": "TB"
+    "STORAGE_TABLE_NAME": "TB",
+    "PYTHON_ENABLE_WORKER_DEPENDENCIES": "1",
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": ""
   }
 }
