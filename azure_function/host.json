@@ -5,7 +5,8 @@
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"
-      }
+      },
+      "enableLiveMetricsFilters": true
     },
     "logLevel": {
       "default": "Information",
@@ -14,6 +15,7 @@
       "Host.Aggregator": "Information"
     }
   },
+  "telemetryMode": "OpenTelemetry",
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
