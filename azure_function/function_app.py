@@ -13,9 +13,13 @@ tracer: trace.Tracer = trace.get_tracer(__name__)
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.timer_trigger(schedule="0 */5 * * * *", arg_name="timer")
-async def timer_trigger(timer: func.TimerRequest) -> None:
+async def timer_trigger(timer: func.TimerRequest, context) -> None:
+    ctx: Context = extract({
+      "traceparent": context.trace_context.Traceparent,
+      "tracestate": context.trace_context.Tracestate,
+    })
     logging.info("Call: TimerTrigger Started")
-    await RunBusinessLogic(None)
+    await RunBusinessLogic(ctx)
     logging.info("Call: TimerTrigger Ended")
 
 @app.function_name(name="GetRecord")
