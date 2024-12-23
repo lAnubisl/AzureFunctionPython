@@ -1,11 +1,11 @@
 import logging
 import requests
 import azure.functions as func
-import opentelemetry.trace
 from azure.monitor.opentelemetry import configure_azure_monitor
+from opentelemetry import trace
 
 configure_azure_monitor()
-tracer: opentelemetry.trace.Tracer = opentelemetry.trace.get_tracer(__name__)
+tracer: trace.Tracer = trace.get_tracer(__name__)
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.timer_trigger(schedule="0 */5 * * * *", arg_name="timer")
