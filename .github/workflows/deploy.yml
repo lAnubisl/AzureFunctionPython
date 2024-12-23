@@ -5,6 +5,9 @@ on:
       - main
   workflow_dispatch:
 
+concurrency: 
+  group: ${{ github.head_ref ||  github.ref }}
+
 permissions: # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
