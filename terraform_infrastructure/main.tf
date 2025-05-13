@@ -16,12 +16,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-func-python-deployment-test"
+  name     = "rg-azfunc-python"
   location = "westeurope"
 }
 
 resource "azurerm_storage_account" "st_func" {
-  name                     = "stfuncpython13876"
+  name                     = "stfuncpython26167"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -29,7 +29,7 @@ resource "azurerm_storage_account" "st_func" {
 }
 
 resource "azurerm_service_plan" "func_plan" {
-  name                = "plan-func-python-deployment-13876"
+  name                = "plan-func-python-deployment-26167"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
@@ -37,7 +37,7 @@ resource "azurerm_service_plan" "func_plan" {
 }
 
 resource "azurerm_linux_function_app" "func" {
-  name                       = "func-python-13876"
+  name                       = "func-python-26167"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   service_plan_id            = azurerm_service_plan.func_plan.id
@@ -72,7 +72,7 @@ resource "azurerm_linux_function_app" "func" {
 }
 
 resource "azurerm_log_analytics_workspace" "logs" {
-  name                = "logs-func-python-13876"
+  name                = "logs-func-python-26167"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   sku                 = "PerGB2018"
@@ -80,7 +80,7 @@ resource "azurerm_log_analytics_workspace" "logs" {
 }
 
 resource "azurerm_application_insights" "appi" {
-  name                = "appi-func-python-13876"
+  name                = "appi-func-python-26167"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   workspace_id        = azurerm_log_analytics_workspace.logs.id

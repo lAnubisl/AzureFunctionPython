@@ -9,7 +9,7 @@ depencencies_builder = DependenciesBuilder()
 tracer: trace.Tracer = trace.get_tracer(__name__)
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.timer_trigger(schedule="0 */5 * * * *", arg_name="timer")
+@app.timer_trigger(schedule="0 0 0 * * *", arg_name="timer")
 async def timer_trigger(timer: func.TimerRequest, context: func.Context) -> None:
     with tracer.start_as_current_span("Execute command", context=transform_context(context)):
         await depencencies_builder.get_command().execute()
