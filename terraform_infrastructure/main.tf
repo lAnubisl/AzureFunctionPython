@@ -98,3 +98,7 @@ resource "azurerm_role_assignment" "table_func_role_assignment" {
   role_definition_name = "Storage Table Data Contributor"
   principal_id         = azurerm_linux_function_app.func.identity[0].principal_id
 }
+
+output "function_app_name" {
+  value = azurerm_linux_function_app.func.name
+}
