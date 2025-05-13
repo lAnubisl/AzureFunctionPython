@@ -15,6 +15,8 @@ permissions: # https://docs.github.com/en/actions/deployment/security-hardening-
 jobs:
   infrastructure:
     runs-on: ubuntu-latest
+    outputs:
+      functionAppName: ${{ steps.output.outputs.functionAppName }}
     env:
         ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
