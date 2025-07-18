@@ -12,6 +12,7 @@ permissions: # https://docs.github.com/en/actions/deployment/security-hardening-
 jobs:
   infrastructure:
     runs-on: ubuntu-latest
+    environment: dev
     outputs:
       functionAppName: ${{ steps.output.outputs.functionAppName }}
     env:
@@ -45,6 +46,7 @@ jobs:
 
   function-deploy:
     runs-on: ubuntu-latest
+    environment: dev
     needs: [infrastructure]
     steps:
       - uses: actions/checkout@v4
