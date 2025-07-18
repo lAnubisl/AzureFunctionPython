@@ -5,20 +5,19 @@
 		"vscode": {
 			"settings": {},
 			"extensions": [
-                "hashicorp.terraform",
-                "ms-azuretools.vscode-docker",
-                "ms-azuretools.vscode-azurefunctions",
-                "ms-python.python",
-                "vscode-icons-team.vscode-icons",
-                "github.vscode-github-actions",
-                "GitHub.copilot",
-                "Azurite.azurite",
-                "ms-python.pylint"
-            ]
+		                "hashicorp.terraform",
+		                "ms-azuretools.vscode-docker",
+		                "ms-azuretools.vscode-azurefunctions",
+		                "ms-python.python",
+		                "vscode-icons-team.vscode-icons",
+		                "github.vscode-github-actions",
+		                "GitHub.copilot",
+		                "Azurite.azurite",
+		                "ms-python.pylint"
+		        ]
 		}
 	},
     "features": {
-        "ghcr.io/devcontainers/features/terraform:latest": {},
         "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
             "version": "latest"
         },
@@ -31,6 +30,5 @@
             "tflint": "latest",
             "terragrunt": "latest"
         }
-
     }
 }
