@@ -5,10 +5,7 @@ from dependencies_builder import DependenciesBuilder
 from utils import transform_context
 from ambient_context_manager import set_context, unset_context, get_context
 
-configure_azure_monitor(
-    logger_name="MyApp",
-)
-
+configure_azure_monitor()
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.timer_trigger(schedule="0 0 0 * * *", arg_name="timer")

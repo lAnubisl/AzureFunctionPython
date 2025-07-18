@@ -69,6 +69,15 @@ resource "azurerm_linux_function_app" "func" {
       python_version = "3.11"
     }
   }
+  lifecycle {
+    ignore_changes = [
+      app_settings["WEBSITE_ENABLE_SYNC_UPDATE_SITE"],
+      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      tags["hidden-link: /app-insights-conn-string"],
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"],
+    ]
+  }
 }
 
 resource "azurerm_log_analytics_workspace" "logs" {
