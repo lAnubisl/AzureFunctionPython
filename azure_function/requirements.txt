@@ -3,6 +3,3 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions==1.22.1
-
-# https://github.com/Azure/azure-functions-python-worker/issues/1651
-cryptography==43.0.3
