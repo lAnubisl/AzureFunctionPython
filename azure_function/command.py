@@ -6,7 +6,7 @@ from ambient_context_manager import get_context
 class Command:
     def __init__(self, logger: Logger, tracer: Tracer):
         self.__logger = logger
-         self.__tracer: Tracer = tracer
+        self.__tracer: Tracer = tracer
 
     async def execute(self) -> None:
         async with aiohttp.ClientSession() as session:
