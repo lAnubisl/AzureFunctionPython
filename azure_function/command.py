@@ -1,12 +1,13 @@
 from logging import Logger
-import requests
+import aiohttp
 
 class Command:
     def __init__(self, logger: Logger):
         self.__logger = logger
 
     async def execute(self) -> None:
-        google_resp = requests.get(url='https://google.com', timeout=10)
-        self.__logger.info(f"google response status code {google_resp.status_code}")
-        msft_resp = requests.get(url='https://www.microsoft.com', timeout=10)
-        self.__logger.info(f"msft response status code {msft_resp.status_code}")
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://www.google.com') as google_resp:
+                self.__logger.info(f"google response status code {google_resp.status}")
+            async with session.get('https://www.microsoft.com') as msft_resp:
+                self.__logger.info(f"msft response status code {msft_resp.status}")
