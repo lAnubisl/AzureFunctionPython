@@ -6,7 +6,7 @@ class DependenciesBuilder:
         self.logger: logging.Logger = logging.getLogger("MyApp")
 
     def get_command(self):
-        return Command(self.logger, self.tracer)
+        return Command(self.logger)
 
     def get_logger(self) -> logging.Logger:
         return self.logger
