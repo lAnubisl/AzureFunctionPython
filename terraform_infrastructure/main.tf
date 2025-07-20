@@ -52,6 +52,10 @@ resource "azurerm_linux_function_app" "func" {
     STORAGE_ACCOUNT_NAME            = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME              = azurerm_storage_table.st_tbl_records.name
 
+    # https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=python#set-the-cloud-role-name-and-the-cloud-role-instance
+    OTEL_SERVICE_NAME        = "MyFunctionApp"
+    OTEL_RESOURCE_ATTRIBUTES = "service.namespace=MyNamespace,service.instance.id=MyInstance"
+
     # https://learn.microsoft.com/en-us/troubleshoot/azure/azure-monitor/app-insights/telemetry/opentelemetry-troubleshooting-python#duplicate-trace-logs-in-azure-functions
     # ### Duplicate trace logs in Azure Functions ###
     # If you see a pair of entries for each trace log within Application Insights, you probably enabled the following types of logging instrumentation:
