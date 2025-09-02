@@ -21,7 +21,7 @@ jobs:
         ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: hashicorp/setup-terraform@v3
 
@@ -49,7 +49,7 @@ jobs:
     environment: dev
     needs: [infrastructure]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Python
         uses: actions/setup-python@v5
