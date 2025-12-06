@@ -1,5 +1,5 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:2",
+    "image": "mcr.microsoft.com/devcontainers/universal:5",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
@@ -20,15 +20,6 @@
     "features": {
         "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
             "version": "latest"
-        },
-        "ghcr.io/devcontainers/features/python:1": {
-            "installTools": true,
-            "version": "3.11"
-        },
-        "ghcr.io/devcontainers/features/terraform:1": {
-            "version": "latest",
-            "tflint": "latest",
-            "terragrunt": "latest"
         }
     }
 }
