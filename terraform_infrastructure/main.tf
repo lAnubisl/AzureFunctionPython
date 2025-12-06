@@ -58,7 +58,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
 
   runtime_name           = "python"
   runtime_version        = "3.11"
-  maximum_instance_count = 2
+  maximum_instance_count = 40
   instance_memory_in_mb  = 512
 
   app_settings = {
@@ -123,9 +123,9 @@ resource "azurerm_storage_table" "st_tbl_records" {
 resource "azurerm_role_assignment" "table_func_role_assignment" {
   scope                = azurerm_storage_account.st_func.id
   role_definition_name = "Storage Table Data Contributor"
-  principal_id         = azurerm_linux_function_app.func.identity[0].principal_id
+  principal_id         = azurerm_function_app_flex_consumption.func.identity[0].principal_id
 }
 
 output "function_app_name" {
-  value = azurerm_linux_function_app.func.name
+  value = azurerm_function_app_flex_consumption.func.name
 }
