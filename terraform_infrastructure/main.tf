@@ -42,51 +42,6 @@ resource "azurerm_service_plan" "func_plan" {
   sku_name            = "FC1"
 }
 
-resource "azurerm_linux_function_app" "func" {
-  name                       = "func-python-26167"
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  service_plan_id            = azurerm_service_plan.func_plan.id
-  storage_account_name       = azurerm_storage_account.st_func.name
-  storage_account_access_key = azurerm_storage_account.st_func.primary_access_key
-  builtin_logging_enabled    = false
-  app_settings = {
-    # https://learn.microsoft.com/en-us/azure/azure-functions/functions-app-settings#python_enable_worker_extensions
-    
-    PYTHON_ENABLE_WORKER_EXTENSIONS = "1" 
-    FUNCTIONS_WORKER_RUNTIME        = "python"
-    STORAGE_ACCOUNT_NAME            = azurerm_storage_account.st_func.name
-    STORAGE_TABLE_NAME              = azurerm_storage_table.st_tbl_records.name
-
-    # https://learn.microsoft.com/en-us/troubleshoot/azure/azure-monitor/app-insights/telemetry/opentelemetry-troubleshooting-python#duplicate-trace-logs-in-azure-functions
-    # ### Duplicate trace logs in Azure Functions ###
-    # If you see a pair of entries for each trace log within Application Insights, you probably enabled the following types of logging instrumentation:
-    # The native logging instrumentation in Azure Functions
-    # The azure-monitor-opentelemetry logging instrumentation within the distribution
-    # To prevent duplication, you can disable the distribution's logging, but leave the native logging instrumentation in Azure Functions enabled. To do this, set the OTEL_LOGS_EXPORTER environment variable to None.
-    OTEL_LOGS_EXPORTER              = "None"
-  }
-  identity {
-    type = "SystemAssigned"
-  }
-  site_config {
-    application_insights_connection_string = azurerm_application_insights.appi.connection_string
-    application_stack {
-      python_version = "3.11"
-    }
-  }
-  lifecycle {
-    ignore_changes = [
-      app_settings["WEBSITE_ENABLE_SYNC_UPDATE_SITE"],
-      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
-      tags["hidden-link: /app-insights-conn-string"],
-      tags["hidden-link: /app-insights-instrumentation-key"],
-      tags["hidden-link: /app-insights-resource-id"],
-    ]
-  }
-}
-
-
 resource "azurerm_function_app_flex_consumption" "func" {
   name                = "func-python-26167"
   location            = azurerm_resource_group.rg.location
@@ -94,7 +49,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   service_plan_id     = azurerm_service_plan.func_plan.id
 
   storage_container_type      = "blobContainer"
-  storage_container_endpoint  = "${azurerm_storage_account.st_func.primary_blob_endpoint}${azurerm_storage_container.st_func.name}"
+  storage_container_endpoint  = "${azurerm_storage_account.st_func.primary_blob_endpoint}${azurerm_storage_container.sc_func.name}"
   storage_authentication_type = "StorageAccountConnectionString"
   storage_access_key          = azurerm_storage_account.st_func.primary_access_key
 
