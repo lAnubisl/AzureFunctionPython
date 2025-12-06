@@ -1,25 +1,3 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:5",
-	"customizations": {
-		// Configure properties specific to VS Code.
-		"vscode": {
-			"settings": {},
-			"extensions": [
-		                "hashicorp.terraform",
-		                "ms-azuretools.vscode-docker",
-		                "ms-azuretools.vscode-azurefunctions",
-		                "ms-python.python",
-		                "vscode-icons-team.vscode-icons",
-		                "github.vscode-github-actions",
-		                "GitHub.copilot",
-		                "Azurite.azurite",
-		                "ms-python.pylint"
-		        ]
-		}
-	},
-    "features": {
-        "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
-            "version": "latest"
-        }
-    }
+    "image": "mcr.microsoft.com/devcontainers/universal:5"
 }
