@@ -1,3 +1,6 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:5"
+    "image": "mcr.microsoft.com/devcontainers/universal:5",
+    "features": {
+        "ghcr.io/devcontainers/features/terraform:1": {}
+    }
 }
