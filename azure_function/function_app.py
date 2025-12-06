@@ -10,23 +10,24 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.timer_trigger(schedule="0 0 0 * * *", arg_name="timer")
 async def timer_trigger(timer: func.TimerRequest, context: func.Context) -> None:
-    depencencies_builder = DependenciesBuilder()
-    tracer: trace.Tracer = depencencies_builder.get_tracer()
+    builder = DependenciesBuilder()
+    tracer: trace.Tracer = builder.get_tracer()
     set_context(transform_context(context))
     try:
         with tracer.start_as_current_span("Execute command", context=get_context()):
-            await depencencies_builder.get_command().execute()
+            await builder.get_command().execute()
     finally:
         unset_context()
 
 @app.function_name(name="GetRecord")
 @app.route(route="GetRecord", methods=["GET"])
-async def GetRecord(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
-    depencencies_builder = DependenciesBuilder()
-    tracer: trace.Tracer = depencencies_builder.get_tracer()
+async def get_record(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    builder = DependenciesBuilder()
+    tracer: trace.Tracer = builder.get_tracer()
     set_context(transform_context(context))
+    try:
         with tracer.start_as_current_span("Execute command", context=get_context()):
-            await depencencies_builder.get_command().execute()
+            await builder.get_command().execute()
         return func.HttpResponse("Done", status_code=200)
     finally:
         unset_context()
