@@ -16,12 +16,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-azfunc-python"
+  name     = local.resource_group_name
   location = "westeurope"
 }
 
 resource "azurerm_storage_account" "st_func" {
-  name                     = "stfuncpython26167"
+  name                     = local.storage_account_name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -35,7 +35,7 @@ resource "azurerm_storage_container" "sc_func" {
 }
 
 resource "azurerm_service_plan" "func_plan" {
-  name                = "plan-func-python-deployment-26167"
+  name                = local.service_plan_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
@@ -43,7 +43,7 @@ resource "azurerm_service_plan" "func_plan" {
 }
 
 resource "azurerm_function_app_flex_consumption" "func" {
-  name                = "func-python-26167"
+  name                = local.function_app_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   service_plan_id     = azurerm_service_plan.func_plan.id
@@ -57,7 +57,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   webdeploy_publish_basic_authentication_enabled = false
 
   runtime_name           = "python"
-  runtime_version        = "3.11"
+  runtime_version        = "3.13"
   maximum_instance_count = 40
   instance_memory_in_mb  = 512
 
@@ -99,7 +99,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
 
 
 resource "azurerm_log_analytics_workspace" "logs" {
-  name                = "logs-func-python-26167"
+  name                = local.log_analytics_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   sku                 = "PerGB2018"
@@ -107,7 +107,7 @@ resource "azurerm_log_analytics_workspace" "logs" {
 }
 
 resource "azurerm_application_insights" "appi" {
-  name                = "appi-func-python-26167"
+  name                = local.app_insights_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   workspace_id        = azurerm_log_analytics_workspace.logs.id
@@ -128,4 +128,26 @@ resource "azurerm_role_assignment" "table_func_role_assignment" {
 
 output "function_app_name" {
   value = azurerm_function_app_flex_consumption.func.name
+}
+
+resource "random_string" "random" {
+  length  = 8
+  special = false
+  upper   = false
+  lower   = true
+  numeric = false
+}
+
+locals {
+  unique_name = random_string.random.result
+
+  # Resource name locals built from the unique_name prefix (match existing naming patterns)
+  resource_group_name   = "rg-${local.unique_name}"
+  storage_function_name = "stfunc${local.unique_name}"
+  log_analytics_name    = "log-${local.unique_name}"
+  app_insights_name     = "appi-${local.unique_name}"
+  service_plan_name     = "app-service-plan-${local.unique_name}"
+  function_app_name     = "func-${local.unique_name}"
+  storage_account_name  = lower("${local.unique_name}sa")
+
 }
