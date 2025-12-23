@@ -1,8 +1,8 @@
 import azure.functions as func
-import opentelemetry.context as opentelimetry
+from opentelemetry.context import Context
 from opentelemetry.propagate import extract
 
-def transform_context(func_ctx: func.Context) -> opentelimetry.Context:
+def transform_context(func_ctx: func.Context) -> Context:
     """
     Transform the Azure Function context to the OpenTelemetry context
     Documentation: https://pypi.org/project/azure-monitor-opentelemetry/
