@@ -65,19 +65,11 @@ resource "azurerm_function_app_flex_consumption" "func" {
     # https://learn.microsoft.com/en-us/azure/azure-functions/functions-app-settings#python_enable_worker_extensions
     PYTHON_ENABLE_WORKER_EXTENSIONS = "1"
 
+    # https://learn.microsoft.com/en-us/azure/azure-functions/opentelemetry-howto?tabs=app-insights%2Cihostapplicationbuilder%2Cmaven&pivots=programming-language-python#configure-application-settings
+    PYTHON_APPLICATIONINSIGHTS_ENABLE_TELEMETRY = "true"
+
     STORAGE_ACCOUNT_NAME = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME   = azurerm_storage_table.st_tbl_records.name
-
-    # https://learn.microsoft.com/en-us/troubleshoot/azure/azure-monitor/app-insights/telemetry/opentelemetry-troubleshooting-python#duplicate-trace-logs-in-azure-functions
-    # ### Duplicate trace logs in Azure Functions ###
-    # If you see a pair of entries for each trace log within Application Insights, you probably enabled the following types of logging instrumentation:
-    # The native logging instrumentation in Azure Functions
-    # The azure-monitor-opentelemetry logging instrumentation within the distribution
-    # To prevent duplication, you can disable the distribution's logging, but leave the native logging instrumentation in Azure Functions enabled. To do this, set the OTEL_LOGS_EXPORTER environment variable to None.
-    OTEL_LOGS_EXPORTER = "None"
-    # https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=python#set-the-cloud-role-name-and-the-cloud-role-instance
-    OTEL_SERVICE_NAME        = "MyFunctionApp"
-    OTEL_RESOURCE_ATTRIBUTES = "service.instance.id=MyFunctionApp"
   }
   identity {
     type = "SystemAssigned"
