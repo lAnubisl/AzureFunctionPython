@@ -11,11 +11,11 @@
     },
     "logLevel": {
       "default": "Information",
-      "Host.Results": "Warning",
+      "Host.Aggregator": "Error",
+      "Host.Results": "Error",
       "Function": "Information",
-      "Host.Aggregator": "Warning",
-      "request": "Warning",
-      "azure": "Warning"
+      "Worker": "Warning",
+      "Microsoft": "Warning"
     }
   },
   "extensionBundle": {
