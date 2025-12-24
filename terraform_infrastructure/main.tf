@@ -62,12 +62,6 @@ resource "azurerm_function_app_flex_consumption" "func" {
   instance_memory_in_mb  = 512
 
   app_settings = {
-    # https://learn.microsoft.com/en-us/azure/azure-functions/functions-app-settings#python_enable_worker_extensions
-    PYTHON_ENABLE_WORKER_EXTENSIONS = "1"
-
-    # https://learn.microsoft.com/en-us/azure/azure-functions/opentelemetry-howto?tabs=app-insights%2Cihostapplicationbuilder%2Cmaven&pivots=programming-language-python#configure-application-settings
-    PYTHON_APPLICATIONINSIGHTS_ENABLE_TELEMETRY = "true"
-
     STORAGE_ACCOUNT_NAME = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME   = azurerm_storage_table.st_tbl_records.name
   }
