@@ -14,7 +14,8 @@
       "Host.Results": "Warning",
       "Function": "Information",
       "Host.Aggregator": "Warning",
-      "request": "Warning"
+      "request": "Warning",
+      "azure": "Warning"
     }
   },
   "extensionBundle": {
