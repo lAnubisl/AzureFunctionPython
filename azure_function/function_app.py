@@ -1,6 +1,12 @@
+import logging
 import azure.functions as func
 from opentelemetry import trace
 from dependencies_builder import DependenciesBuilder
+
+for name in (
+    "azure"
+):
+    logging.getLogger(name).setLevel(logging.WARNING)
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
