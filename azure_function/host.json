@@ -10,12 +10,12 @@
       "enableLiveMetricsFilters": true
     },
     "logLevel": {
-      "default": "Information",
+      "default": "Error",
       "Host.Aggregator": "Error",
       "Host.Results": "Error",
-      "Function": "Information",
-      "Worker": "Warning",
-      "Microsoft": "Warning"
+      "Function": "Error",
+      "Worker": "Error",
+      "Microsoft": "Error"
     }
   },
   "extensionBundle": {
