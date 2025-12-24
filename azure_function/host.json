@@ -11,9 +11,10 @@
     },
     "logLevel": {
       "default": "Information",
-      "Host.Results": "Information",
+      "Host.Results": "Warning",
       "Function": "Information",
-      "Host.Aggregator": "Information"
+      "Host.Aggregator": "Warning",
+      "request": "Warning"
     }
   },
   "extensionBundle": {
