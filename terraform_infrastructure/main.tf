@@ -64,7 +64,7 @@ resource "azurerm_function_app_flex_consumption" "func" {
   app_settings = {
     STORAGE_ACCOUNT_NAME                        = azurerm_storage_account.st_func.name
     STORAGE_TABLE_NAME                          = azurerm_storage_table.st_tbl_records.name
-    # PYTHON_APPLICATIONINSIGHTS_ENABLE_TELEMETRY = true
+    PYTHON_APPLICATIONINSIGHTS_ENABLE_TELEMETRY = true
   }
   identity {
     type = "SystemAssigned"
