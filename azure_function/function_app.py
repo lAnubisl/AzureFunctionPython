@@ -1,6 +1,9 @@
 import azure.functions as func
 from opentelemetry import trace
 from dependencies_builder import DependenciesBuilder
+from azure.monitor.opentelemetry import configure_azure_monitor # type: ignore
+
+configure_azure_monitor()
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
